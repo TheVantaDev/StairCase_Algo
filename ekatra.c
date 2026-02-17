@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define k 4
+// #define k 4
+#include <math.h>
+int k=4;
+int size=0;
+int numLevels=1;
 typedef struct Node
 {
    int val;
@@ -19,6 +23,21 @@ Node *insert(int val)
     ptr->far=NULL;
     return ptr;
 }
+void updateK()
+{   
+//     k=(int)sqrt(size);
+//     if(k<2) k=2;
+   if(size>0)
+   {
+    k=4;
+    if(k<2) k=2;
+   }
+}
+int leveldefine()
+{
+    if(size<=1) return 1;
+    return (int) ceil(log(size)/log(k))+1;
+}
 //creating node deeply
 void create(int val)
 { if(head==NULL)
@@ -26,9 +45,11 @@ void create(int val)
         head=insert(val);
         back=head;
         // cnt++;
+        size=1;
     }
-    else{
+    else{    
                 cnt++;
+                size++;
         Node *temp=head;
         while(temp->next!=NULL)
         {  temp=temp->next;
@@ -97,6 +118,7 @@ void delete(int val)
     {
         Node *del=head;
         head=head->next;
+        size--;
         free(del);
         printf("delted head node properly ");
         return ;
@@ -114,6 +136,7 @@ void delete(int val)
         temp->far=del->far;
         temp->next=del->next;
         free(del);
+        size--;
         printf("Node delted successfully");
         return;
     }
@@ -149,6 +172,7 @@ while(curr!=NULL)
     curr=curr->next;
 }
 printf("Element not found I believe");
+size--;
 }
 void deletebyposn(int pos)
 { Node *temp=head;
@@ -218,8 +242,6 @@ void searchbyposn(int pos)
         d++;
     }
     printf("node found");
- 
-
 }
 void display(Node *head)
 { while (head!=NULL)
@@ -235,25 +257,23 @@ printf("%d----->",head->val);
 head=head->far;
 }
 }
+int main()
+{
+    create(10);
+    create(20);
+    create(30);
+    create(40);
+    display(head);
+    printf("\n");
+    displayfar(head);
+    printf("\n");
+    search(60);
+    deletebyposn(1);
+    // delete(20);
+    printf("\n");
+    printf("below is deleted");
+        printf("\n");
 
-
-// int main()
-// {
-//     create(10);
-//     create(20);
-//     create(30);
-//     create(40);
-//     display(head);
-//     printf("\n");
-//     displayfar(head);
-//     printf("\n");
-//     search(60);
-//     deletebyposn(1);
-//     // delete(20);
-//     printf("\n");
-//     printf("below is deleted");
-//         printf("\n");
-
-//     display(head);
-//     return 0;
-// }
+    display(head);
+    return 0;
+}
